@@ -7,16 +7,10 @@
 template <typename T>
 class SplayTree final
 {
-    class Node;
-
 public:
 
     SplayTree()
         : _root(nullptr)
-    {}
-
-    explicit SplayTree(Node* root)
-        : _root(root)
     {}
 
     ~SplayTree()
