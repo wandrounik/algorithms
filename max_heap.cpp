@@ -62,7 +62,7 @@ void MaxHeap<T, SIZE>::heapify()
 {
     const auto i_end = parent(_current_size);
 
-    for(size_t i = 0; i < i_end; ++i)
+    for(int i = 0; i < i_end; ++i)
     {
         const auto left_index = left(i);
         const auto right_index = right(i);
