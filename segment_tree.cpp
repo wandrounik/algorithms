@@ -29,7 +29,7 @@ public:
     MyArray& operator=(MyArray&&) = default;
 
 public:
-    T request(size_t left, size_t right);
+    T query(size_t left, size_t right);
 
     void update(RangeOperand operand, size_t left, size_t right);
 
@@ -62,7 +62,7 @@ private:
 
     void destroy_tree(Node* node);
 
-    T inner_request(Node* node, size_t left_node, size_t right_node, size_t left, size_t right);
+    T inner_query(Node* node, size_t left_node, size_t right_node, size_t left, size_t right);
 
     void inner_update(Node* node, size_t left_node, size_t right_node, size_t left, size_t right, const RangeOperand& operand);
 
@@ -100,7 +100,7 @@ void MyArray<T>::destroy_tree(typename MyArray<T>::Node* node)
 }
 
 template<typename T>
-T MyArray<T>::inner_request(typename MyArray<T>::Node* node, size_t left_node, size_t right_node, size_t left, size_t right)
+T MyArray<T>::inner_query(typename MyArray<T>::Node* node, size_t left_node, size_t right_node, size_t left, size_t right)
 {
    if(left_node >= left && right_node <= right) 
        return node->getData();
@@ -111,8 +111,8 @@ T MyArray<T>::inner_request(typename MyArray<T>::Node* node, size_t left_node, s
 
    const auto middle = (left_node + right_node)/2;
 
-   const auto left_node_data = inner_request(node->_left, left_node, middle, left, right);
-   const auto right_node_data = inner_request(node->_right, middle+1, right_node, left, right);
+   const auto left_node_data = inner_query(node->_left, left_node, middle, left, right);
+   const auto right_node_data = inner_query(node->_right, middle+1, right_node, left, right);
 
    const auto result = _operand(left_node_data, right_node_data);
 
@@ -123,9 +123,9 @@ T MyArray<T>::inner_request(typename MyArray<T>::Node* node, size_t left_node, s
 }
 
 template<typename T>
-T MyArray<T>::request(size_t left, size_t right)
+T MyArray<T>::query(size_t left, size_t right)
 {
-    return inner_request(_root, 0, 7, left, right);
+    return inner_query(_root, 0, 7, left, right);
 }
 
 template<typename T>
@@ -175,34 +175,34 @@ int main()
 
     MyArray<int> array({0, 1, 2, 3, 4, 5, 6, 7}, std::plus<>());
 
-    std::cout << "r[1,5]: " << array.request(1, 5) << std::endl;
-    std::cout << "r[2,6]: " << array.request(2, 6) << std::endl;
-    std::cout << "r[1,6]: " << array.request(1, 6) << std::endl;
-    std::cout << "r[0,7]: " << array.request(0, 7) << std::endl;
+    std::cout << "r[1,5]: " << array.query(1, 5) << std::endl;
+    std::cout << "r[2,6]: " << array.query(2, 6) << std::endl;
+    std::cout << "r[1,6]: " << array.query(1, 6) << std::endl;
+    std::cout << "r[0,7]: " << array.query(0, 7) << std::endl;
     
     
     array.update(multiplyByTwo, 0, 3);
 
     std::cout << "\nAfter update: multiplyByTwo[0,3]\n";
-    std::cout << "r[0,3]: " << array.request(0, 3) << std::endl;
-    std::cout << "r[0,7]: " << array.request(0, 7) << std::endl;
-    std::cout << "r[1,6]: " << array.request(1, 6) << std::endl;
-    std::cout << "r[0,6]: " << array.request(0, 6) << std::endl;
+    std::cout << "r[0,3]: " << array.query(0, 3) << std::endl;
+    std::cout << "r[0,7]: " << array.query(0, 7) << std::endl;
+    std::cout << "r[1,6]: " << array.query(1, 6) << std::endl;
+    std::cout << "r[0,6]: " << array.query(0, 6) << std::endl;
 
     array.update(multiplyByThree, 2, 5);
 
     std::cout << "\nAfter update: multiplyByThree[2,5]\n";
-    std::cout << "r[0,3]: " << array.request(0, 3) << std::endl;
-    std::cout << "r[2,7]: " << array.request(2, 7) << std::endl;
-    std::cout << "r[1,6]: " << array.request(1, 6) << std::endl;
+    std::cout << "r[0,3]: " << array.query(0, 3) << std::endl;
+    std::cout << "r[2,7]: " << array.query(2, 7) << std::endl;
+    std::cout << "r[1,6]: " << array.query(1, 6) << std::endl;
 
     std::cout << "\n############# RESULT #################\n";
-    std::cout << "r[0,0]: " << array.request(0, 0) << std::endl;
-    std::cout << "r[1,1]: " << array.request(1, 1) << std::endl;
-    std::cout << "r[2,2]: " << array.request(2, 2) << std::endl;
-    std::cout << "r[3,3]: " << array.request(3, 3) << std::endl;
-    std::cout << "r[4,4]: " << array.request(4, 4) << std::endl;
-    std::cout << "r[5,5]: " << array.request(5, 5) << std::endl;
-    std::cout << "r[6,6]: " << array.request(6, 6) << std::endl;
-    std::cout << "r[7,7]: " << array.request(7, 7) << std::endl;
+    std::cout << "r[0,0]: " << array.query(0, 0) << std::endl;
+    std::cout << "r[1,1]: " << array.query(1, 1) << std::endl;
+    std::cout << "r[2,2]: " << array.query(2, 2) << std::endl;
+    std::cout << "r[3,3]: " << array.query(3, 3) << std::endl;
+    std::cout << "r[4,4]: " << array.query(4, 4) << std::endl;
+    std::cout << "r[5,5]: " << array.query(5, 5) << std::endl;
+    std::cout << "r[6,6]: " << array.query(6, 6) << std::endl;
+    std::cout << "r[7,7]: " << array.query(7, 7) << std::endl;
 }
